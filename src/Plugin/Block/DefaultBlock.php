@@ -12,7 +12,7 @@ use Drupal\Core\Link;
  *
  * @Block(
  *  id = "default_block",
- *  admin_label = @Translation("Default block"),
+ *  admin_label = @Translation("Welcome"),
  * )
  */
 class DefaultBlock extends BlockBase {
