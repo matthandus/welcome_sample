@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Contains welcome_sample.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function welcome_sample_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the welcome_sample module.
+    case 'help.page.welcome_sample':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Code sample of a module that adds a configurable welcome block.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function welcome_sample_theme() {
+  return [
+    'welcome_sample' => [
+      'render element' => 'children',
+    ],
+  ];
+}

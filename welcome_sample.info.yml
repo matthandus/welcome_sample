@@ -1,0 +1,7 @@
+name: 'Welcome Sample'
+type: module
+description: 'Code sample of a module that adds a configurable welcome block.'
+core: 8.x
+package: 'Custom'
+dependencies:
+  - block
