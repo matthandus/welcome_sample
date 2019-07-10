@@ -4,6 +4,8 @@ namespace Drupal\welcome_sample\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+use Drupal\Core\Link;
 
 /**
  * Provides a 'DefaultBlock' block.
@@ -58,8 +60,32 @@ class DefaultBlock extends BlockBase {
    */
   public function build() {
     $build = [];
-    $build['default_block_welcome_message']['#markup'] = '<p>' . $this->configuration['welcome_message']. '</p>';
-    $build['default_block_hide_welcome_message_from_anonym']['#markup'] = '<p>' . $this->configuration['hide_welcome_message_from_anonym']. '</p>';
+    // Get current user
+    $user = \Drupal::currentUser();
+    // Add default message for logged in users
+    if ($user->isAuthenticated()) {
+      // Get username
+      $name = $user->getUsername();
+      // Get last login time
+      $logintime = $user->getLastAccessedTime();
+      $login = \Drupal::service('date.formatter')->format(
+        $logintime, 'custom', 'm/d/Y'
+      );
+      // Get user id
+      $id = $user->id();
+      // Generate profile url
+      $url = Url::fromRoute('entity.user.canonical', array('user'  => $id));
+      // Generate profile link
+      $profile_link = Link::fromTextAndUrl('Visit your profile', $url);
+      $profile = $profile_link->toString();
+      $build['default_block_authenticated_message']['#markup'] = $this->t('<p>Hello ​ @name!<br>
+      Your last log in was ​@login.<br>
+      @profile</p>', array('@name' => $name, '@login' => $login, '@profile' => $profile));
+    }
+    // When box is checked hide custom message to anonymous users
+    if (($user->isAuthenticated() == TRUE) || ($this->configuration['hide_welcome_message_from_anonym'] != 1) && ($user->isAuthenticated() == FALSE)) {
+      $build['default_block_welcome_message']['#markup'] = '<p>' . $this->configuration['welcome_message']. '</p>';
+    }
 
     return $build;
   }
