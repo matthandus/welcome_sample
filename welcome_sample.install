@@ -1,16 +1,26 @@
 <?php
 
-// Create block and save to bartik region
-$blockService = \Drupal::service('entity.manager')->getStorage('block');
-$plugin_id = 'default_block';
-$id = $plugin_id . '1000';
-$theme = 'bartik';
-$block = $blockService->create(
-  array(
+/**
+ * @file
+ * Contains install and update functions for Welcome Sample.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function welcome_sample_install() {
+  $entityManagerService = \Drupal::service('entity.manager');
+  $getBlockStorage = $entityManagerService->getStorage('block');
+  $plugin_id = 'default_block';
+  $id = $plugin_id . '1000';
+  $theme = 'bartik';
+  $block = $getBlockStorage->create(
+    array(
       'id'=> $id,
       'plugin' => $plugin_id,
       'theme' => $theme,
-  )
-);
-$block->setRegion('sidebar_first');
-$block->save();
+    )
+  );
+  $block->setRegion('sidebar_first');
+  $block->save();
+}
