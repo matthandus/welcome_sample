@@ -6,6 +6,8 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * Provides a 'DefaultBlock' block.
@@ -82,12 +84,17 @@ class DefaultBlock extends BlockBase {
       Your last log in was ​@login.<br>
       @profile</p>', array('@name' => $name, '@login' => $login, '@profile' => $profile));
     }
-    // When box is checked hide custom message to anonymous users
-    if (($user->isAuthenticated() == TRUE) || ($this->configuration['hide_welcome_message_from_anonym'] != 1) && ($user->isAuthenticated() == FALSE)) {
-      $build['default_block_welcome_message']['#markup'] = '<p>' . $this->configuration['welcome_message']. '</p>';
-    }
+    $build['default_block_welcome_message']['#markup'] = '<p>' . $this->configuration['welcome_message']. '</p>';
 
     return $build;
+  }
+
+  /**
+  * {@inheritdoc}
+  */
+  public function blockAccess(AccountInterface $account) {
+    $user = \Drupal::currentUser();
+    return AccessResult::allowedIf(($user->isAuthenticated() == TRUE) || ($this->configuration['hide_welcome_message_from_anonym'] == 1) && ($user->isAuthenticated() == FALSE));
   }
 
 }
