@@ -36,14 +36,14 @@ class DefaultBlock extends BlockBase {
       '#title' => $this->t('Welcome Message'),
     '#description' => $this->t('Enter text to display a custom welcome message to users.'),
       '#default_value' => $this->configuration['welcome_message'],
-      '#weight' => '0',
+      '#weight' => '2',
     ];
     $form['hide_welcome_message_from_anonym'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Hide Welcome Message from Anonymous Users'),
     '#description' => $this->t('Check the box to hide the welcome message from users that are not logged in.'),
       '#default_value' => $this->configuration['hide_welcome_message_from_anonym'],
-      '#weight' => '1',
+      '#weight' => '3',
     ];
 
     return $form;
